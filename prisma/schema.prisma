@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum ParticipationType {
+  exhibitor
+  organizer
+  press
+  visitor
+}
+
+enum SendVia {
+  email
+  whatsapp
+}
+
+enum UserStatus {
+  pending
+  accepted
+  rejected
+}
+
+model company {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  users       user[]
+  users_limit Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model admin {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  email         String  @unique
+  password      String
+  badge_expired Boolean @default(false)
+}
+
+model user {
+  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
+  first_name         String
+  last_name          String
+  email              String
+  company_name       String
+  country            String
+  country_code       String
+  phone_number       String
+  position           String
+  participation_type ParticipationType
+  send_via           SendVia
+  status             UserStatus        @default(pending)
+  pdf_file           PdfFile[]
+  image              image[]
+  qr_code            qrCode[]
+  company_id         String?           @db.ObjectId
+  company            company?          @relation(fields: [company_id], references: [id])
+  created_at         DateTime          @default(now())
+  updated_at         DateTime          @updatedAt
+}
+
+model image {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  user_id    String   @db.ObjectId
+  user       user     @relation(fields: [user_id], references: [id])
+  url        String
+  public_id  String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model qrCode {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  user_id    String   @db.ObjectId
+  user       user     @relation(fields: [user_id], references: [id])
+  url        String
+  public_id  String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model PdfFile {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  url        String
+  public_id  String
+  user_id    String   @db.ObjectId
+  user       user     @relation(fields: [user_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
