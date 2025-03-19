@@ -67,6 +67,7 @@ export default defineEventHandler(async (event) => {
       where: { id },
       data: filteredData,
     });
+    console.log(user);
     if (user) {
       if (user.image.length > 0) {
         await deleteFromCloudinary(user.image[0].public_id, "image");
