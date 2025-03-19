@@ -62,6 +62,11 @@ export default defineEventHandler(async (event) => {
       where: {
         id,
       },
+      include: {
+        pdf_file: true,
+        image: true,
+        qr_code: true,
+      },
     });
     const result = await prisma.user.update({
       where: { id },
