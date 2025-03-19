@@ -68,13 +68,13 @@ export default defineEventHandler(async (event) => {
       data: filteredData,
     });
     if (user) {
-      if (user.image[0]) {
+      if (user.image.length > 0) {
         await deleteFromCloudinary(user.image[0].public_id, "image");
       }
-      if (user.qr_code[0]) {
+      if (user.qr_code.length > 0) {
         await deleteFromCloudinary(user.qr_code[0].public_id, "image");
       }
-      if (user.pdf_file[0]) {
+      if (user.pdf_file.length > 0) {
         await deleteFromCloudinary(user.pdf_file[0].public_id, "file");
       }
       await prisma.pdfFile.deleteMany({
