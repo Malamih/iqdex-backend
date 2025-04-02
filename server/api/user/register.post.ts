@@ -22,7 +22,6 @@ export default defineEventHandler(async (event) => {
       return field;
     }
   };
-  console.log("fields reached");
   const first_name = getFieldValue("first_name", false);
   const last_name = getFieldValue("last_name", false);
   const email = getFieldValue("email", false);
@@ -57,16 +56,15 @@ export default defineEventHandler(async (event) => {
       );
     }
   });
-  console.log("fields validation reached");
-  if (!validateCountryCode(country_code)) {
-    return sendError(
-      event,
-      createError({
-        statusCode: 500,
-        statusMessage: "Country code is not valid.",
-      })
-    );
-  }
+  // if (!validateCountryCode(country_code)) {
+  //   return sendError(
+  //     event,
+  //     createError({
+  //       statusCode: 500,
+  //       statusMessage: "Country code is not valid.",
+  //     })
+  //   );
+  // }
   const availableParticipationTypes = [
     "exhibitor",
     "press",
@@ -100,7 +98,6 @@ export default defineEventHandler(async (event) => {
   }
 
   if (participation_type != "exhibitor") {
-    console.log("Exhibitor checker reached");
     try {
       const company = await prisma.company.findFirst({
         where: { name: company_name.toLowerCase() },
@@ -139,12 +136,10 @@ export default defineEventHandler(async (event) => {
         send via: ${send_via}
         `
       );
-      console.log("Qr code reached");
       const cldImage = await (<any>(
         uploadStreamCloudinary(image, "profile_images")
       ));
       const cldQrcode = await uploadToCloudinary(qrCodeBinary, "qr_codes");
-      console.log("User reached");
       const user = await createUser(data);
       await createImage({
         public_id: cldImage.public_id,
