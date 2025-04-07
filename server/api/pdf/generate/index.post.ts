@@ -6,6 +6,7 @@ import { uploadPdfFile } from "~/server/db/cloudinary";
 import { createPdfFile } from "~/server/db/pdfFile";
 import { useImageHelpers } from "~/composables/image";
 import axios from "axios";
+import sharp from "sharp";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -71,11 +72,11 @@ export default defineEventHandler(async (event) => {
     const firstPage = pages[0];
 
     const contentType = getContentType(user.image[0].url);
-
+    const processedImage = await sharp(imageBytes).rotate().toBuffer();
     const embeddedImage =
       contentType === "png"
-        ? await pdfDoc.embedPng(imageBytes)
-        : await pdfDoc.embedJpg(imageBytes);
+        ? await pdfDoc.embedPng(processedImage)
+        : await pdfDoc.embedJpg(processedImage);
     const embeddedQrCode = await pdfDoc.embedPng(qrCodeBytes);
 
     firstPage.drawImage(embeddedQrCode, {
