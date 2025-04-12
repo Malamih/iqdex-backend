@@ -8,6 +8,7 @@ const unProtectedRoutes = [
   "/api/company",
   "/api/facebook/refreshToken",
   "/api/pdf/send/whatsapp",
+  "/api/checkAuth",
 ];
 
 export default defineEventHandler(async (event) => {
