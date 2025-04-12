@@ -12,6 +12,13 @@ export default defineEventHandler(async (event) => {
       where: { email: { contains: search, mode: "insensitive" } },
       skip,
       take: limit,
+      include: {
+        _count: true,
+        company: true,
+        image: true,
+        pdf_file: true,
+        qr_code: true,
+      },
     }),
     prisma.user.count(),
   ]);
