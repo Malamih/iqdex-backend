@@ -1,10 +1,27 @@
 import jwt from "jsonwebtoken";
-import { getCookie } from "h3";
+import {
+  getCookie,
+  getQuery,
+  getHeader,
+  H3Event,
+  sendError,
+  createError,
+} from "h3";
 
-export const authChecker = (event: any) => {
+export const authChecker = (event: H3Event) => {
   const config = useRuntimeConfig(event);
-  const token = getCookie(event, "token");
-  console.log(token);
+
+  // 1. حاول تأخذ التوكن من الكوكي
+  let token = getCookie(event, "token");
+
+  // 2. أو من الهيدر (Authorization: Bearer xxx)
+  if (!token) {
+    const authHeader = getHeader(event, "authorization");
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
+    }
+  }
+
   if (!token) {
     return sendError(
       event,
@@ -14,7 +31,7 @@ export const authChecker = (event: any) => {
 
   try {
     const decoded = jwt.verify(token, config.jwt_secret) as { id: string };
-    return decoded; // ترجع بيانات المستخدم مثل id
+    return decoded;
   } catch (err) {
     return sendError(
       event,
