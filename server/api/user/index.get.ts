@@ -9,9 +9,17 @@ export default defineEventHandler(async (event) => {
 
   const [users, total] = await Promise.all([
     prisma.user.findMany({
-      where: { email: { contains: search, mode: "insensitive" } },
+      where: {
+        email: {
+          contains: search,
+          mode: "insensitive",
+        },
+      },
       skip,
       take: limit,
+      orderBy: {
+        created_at: "desc",
+      },
       include: {
         _count: true,
         company: true,
@@ -20,8 +28,16 @@ export default defineEventHandler(async (event) => {
         qr_code: true,
       },
     }),
-    prisma.user.count(),
+    prisma.user.count({
+      where: {
+        email: {
+          contains: search,
+          mode: "insensitive",
+        },
+      },
+    }),
   ]);
+
   return {
     ok: true,
     message: "Users have been fetched.",
