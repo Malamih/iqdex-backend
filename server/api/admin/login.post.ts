@@ -49,12 +49,7 @@ export default defineEventHandler(async (event) => {
     const token = jwt.sign({ admin_id: adminByEmail.id }, config.jwt_secret, {
       expiresIn: "1d",
     });
-    setCookie(event, "token", token, {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-      path: "/",
-    });
+
     return {
       message: "Logged in successfully.",
       admin: {

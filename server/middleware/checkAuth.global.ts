@@ -8,7 +8,6 @@ const unProtectedRoutes = [
   "/api/company",
   "/api/facebook/refreshToken",
   "/api/pdf/send/whatsapp",
-  "/api/checkAuth",
 ];
 
 export default defineEventHandler(async (event) => {
@@ -27,7 +26,7 @@ export default defineEventHandler(async (event) => {
     return;
   }
 
-  const token = getRequestHeader(event, "authorization")?.split(" ")[1];
+  const token = getRequestHeader(event, "Authorization")?.split(" ")[1];
   if (!token) {
     return sendError(
       event,
