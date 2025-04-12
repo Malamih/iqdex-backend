@@ -27,5 +27,6 @@ export default defineEventHandler(async (event) => {
     message: "Users have been fetched.",
     users,
     totalPages: Math.ceil(total / limit),
+    count: total,
   };
 });
