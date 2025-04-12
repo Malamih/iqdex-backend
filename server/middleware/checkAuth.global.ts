@@ -28,10 +28,13 @@ export default defineEventHandler(async (event) => {
 
   const token = getRequestHeader(event, "authorization")?.split(" ")[1];
   if (!token) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized: No token provided.",
-    });
+    return sendError(
+      event,
+      createError({
+        statusCode: 401,
+        statusMessage: "Unauthorized: No token provided.",
+      })
+    );
   }
 
   try {
@@ -39,9 +42,12 @@ export default defineEventHandler(async (event) => {
     const decoded = jwt.verify(token, config.jwt_secret);
     event.context.user = decoded;
   } catch (error) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized: Invalid token.",
-    });
+    return sendError(
+      event,
+      createError({
+        statusCode: 401,
+        statusMessage: "Unauthorized: Invalid token.",
+      })
+    );
   }
 });
