@@ -3,18 +3,25 @@ import prisma from "~/lib/prisma";
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
   const search = (query.search as string) || "";
+  const status = query.status as string | undefined; // Get status from query
   const page = parseInt(query.page as string) || 1;
   const limit = 50;
   const skip = (page - 1) * limit;
 
+  const whereClause: any = {
+    email: {
+      contains: search,
+      mode: "insensitive",
+    },
+  };
+
+  if (status) {
+    whereClause.status = status;
+  }
+
   const [users, total] = await Promise.all([
     prisma.user.findMany({
-      where: {
-        email: {
-          contains: search,
-          mode: "insensitive",
-        },
-      },
+      where: whereClause,
       skip,
       take: limit,
       orderBy: {
@@ -29,12 +36,7 @@ export default defineEventHandler(async (event) => {
       },
     }),
     prisma.user.count({
-      where: {
-        email: {
-          contains: search,
-          mode: "insensitive",
-        },
-      },
+      where: whereClause,
     }),
   ]);
 
