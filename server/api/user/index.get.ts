@@ -3,7 +3,7 @@ import prisma from "~/lib/prisma";
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
   const search = (query.search as string) || "";
-  const status = query.status as string | undefined; // Get status from query
+  const statusParam = query.status as string | undefined;
   const page = parseInt(query.page as string) || 1;
   const limit = 50;
   const skip = (page - 1) * limit;
@@ -15,8 +15,18 @@ export default defineEventHandler(async (event) => {
     },
   };
 
-  if (status) {
-    whereClause.status = status;
+  // Handle multiple status values
+  if (statusParam) {
+    const validStatuses = ["accepted", "rejected", "pending"];
+    const statuses = statusParam
+      .split(",")
+      .filter((s) => validStatuses.includes(s.toLowerCase()));
+
+    if (statuses.length > 0) {
+      whereClause.status = {
+        in: statuses,
+      };
+    }
   }
 
   const [users, total] = await Promise.all([
