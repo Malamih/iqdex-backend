@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const search = (query.search as string) || "";
   const statusParam = query.status as string | undefined;
   const page = parseInt(query.page as string) || 1;
-  const limit = (query.limit as any) || 50;
+  const limit = parseInt(query.limit as string) || 50;
   const skip = (page - 1) * limit;
 
   const whereClause: any = {
