@@ -34,7 +34,6 @@ export default defineEventHandler(async (event) => {
   const image = getFieldValue("image", true);
   const country_code = getFieldValue("country_code", false);
 
-  const { validateCountryCode } = usePhoneNumberHelpers();
   const fields = [
     first_name,
     last_name,
