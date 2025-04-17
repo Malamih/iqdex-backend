@@ -30,7 +30,6 @@ export default defineEventHandler(async (event) => {
   const company_name: string | any = getFieldValue("company_name", false);
   const participation_type: any = getFieldValue("participation_type", false);
   const send_via: any = getFieldValue("send_via", false);
-  // const country = getFieldValue("country", false);
   const image = getFieldValue("image", true);
   const country_code = getFieldValue("country_code", false);
 
@@ -43,7 +42,6 @@ export default defineEventHandler(async (event) => {
     company_name,
     participation_type,
     send_via,
-    // country,
     image,
     country_code,
   ];
@@ -116,7 +114,6 @@ export default defineEventHandler(async (event) => {
         last_name: last_name ?? "",
         email: email ?? "",
         company_name: company_name ?? "",
-        // country: country ?? "",
         country_code: country_code?.toString(),
         phone_number: phone_number?.toString() ?? "",
         position: position ?? "",
@@ -155,6 +152,7 @@ export default defineEventHandler(async (event) => {
         user,
       };
     } catch (error: any) {
+      console.error(error);
       return sendError(
         event,
         createError({ statusCode: 500, statusMessage: error.statusMessage })
@@ -193,7 +191,6 @@ export default defineEventHandler(async (event) => {
       last_name: last_name ?? "",
       email: email ?? "",
       company_name: company_name ?? "",
-      // country: country ?? "",
       country_code: country_code?.toString(),
       phone_number: phone_number?.toString() ?? "",
       position: position ?? "",

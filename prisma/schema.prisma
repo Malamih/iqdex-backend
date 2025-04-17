@@ -46,6 +46,7 @@ model user {
   first_name         String
   last_name          String
   email              String
+  company_name       String
   country_code       String
   phone_number       String
   position           String
