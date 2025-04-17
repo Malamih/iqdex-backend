@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
   const company_name: string | any = getFieldValue("company_name", false);
   const participation_type: any = getFieldValue("participation_type", false);
   const send_via: any = getFieldValue("send_via", false);
-  const country = getFieldValue("country", false);
+  // const country = getFieldValue("country", false);
   const image = getFieldValue("image", true);
   const country_code = getFieldValue("country_code", false);
 
@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
     company_name,
     participation_type,
     send_via,
-    country,
+    // country,
     image,
     country_code,
   ];
@@ -117,7 +117,7 @@ export default defineEventHandler(async (event) => {
         last_name: last_name ?? "",
         email: email ?? "",
         company_name: company_name ?? "",
-        country: country ?? "",
+        // country: country ?? "",
         country_code: country_code?.toString(),
         phone_number: phone_number?.toString() ?? "",
         position: position ?? "",
@@ -131,7 +131,6 @@ export default defineEventHandler(async (event) => {
         phone number: ${phone_number}
         company name: ${company_name}
         position: ${position}
-        country: ${country}
         participation type: ${participation_type}
         send via: ${send_via}
         `
@@ -195,7 +194,7 @@ export default defineEventHandler(async (event) => {
       last_name: last_name ?? "",
       email: email ?? "",
       company_name: company_name ?? "",
-      country: country ?? "",
+      // country: country ?? "",
       country_code: country_code?.toString(),
       phone_number: phone_number?.toString() ?? "",
       position: position ?? "",
@@ -210,7 +209,6 @@ export default defineEventHandler(async (event) => {
       phone number: ${phone_number}
       company name: ${company_name}
       position: ${position}
-      country: ${country}
       participation type: ${participation_type}
       send via: ${send_via}
       `
