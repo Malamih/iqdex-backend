@@ -23,7 +23,8 @@ export default defineEventHandler(async (event) => {
     return "";
   }
   const route = event.node.req.url as string;
-  if (unProtectedRoutes.includes(route)) {
+  console.log(unProtectedRoutes.includes("/company"));
+  if (unProtectedRoutes.includes(route.split("?")[0])) {
     return;
   }
 

@@ -4,11 +4,10 @@ export default defineEventHandler(async (event) => {
   try {
     const query = getQuery(event);
     const page = Number(query.page) || 1;
-    const pageSize = Math.min(Number(query.pageSize) || 10, 100);
     const search = (query.search as string) || "";
-    const limit = Math.min(Number(query.limit) || Infinity, 400);
+    const limit = Math.min(Number(query.limit) || Infinity, 500);
 
-    const take = Math.min(pageSize, limit);
+    const take = limit;
 
     const where = {
       name: search
@@ -26,14 +25,24 @@ export default defineEventHandler(async (event) => {
       take,
       where,
       include: {
-        users: true,
-        _count: true,
+        _count: {
+          select: {
+            users: true, // Only count the users relation
+          },
+        },
       },
     });
 
+    // Transform the response to flatten the count
+    const companiesWithUserCount = companies.map((company) => ({
+      ...company,
+      userCount: company._count.users, // Extract the count
+      _count: undefined, // Remove the _count field
+    }));
+
     return {
       message: "Companies are fetched successfully.",
-      companies,
+      companies: companiesWithUserCount,
       pagination: {
         currentPage: page,
         pageSize: take,
